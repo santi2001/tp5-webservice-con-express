@@ -1,0 +1,81 @@
+<div class="cuerpopagina3">
+    <form class="card" #mensajeriaForm="ngForm">
+      <div class="card-header"> Envio de Mensajes-</div>
+        <div class="card-body">
+          <div class="row form-group">
+            <label class="col-sm-12 col-md-4">Para</label>
+            <input class="form-control col-sm-12 col-md-8 " type="text" name="txtdesde" [(ngModel)]="mensaje.para" #txtdesde="ngModel" required minlength="3"/>
+            <div *ngIf="txtdesde.invalid && (txtdesde.dirty || txtdesde.touched)" class="alert alert-danger">
+              <div *ngIf="txtdesde.errors.required">
+                Parametro requerido.
+              </div>
+              <div *ngIf="txtdesde.errors.minlength">
+                Debe tener al menos 3 caracteres.
+              </div>
+            </div>
+          </div>
+        <div class="row form-group">
+          <label class="col-sm-12 col-md-4" >Desde</label>
+          <input class="form-control col-sm-12 col-md-8" type="text" name="txthasta" [(ngModel)]="mensaje.desde" #txthasta="ngModel" required minlength="3"/>
+          <div *ngIf="txthasta.invalid && (txthasta.dirty || txthasta.touched)" class="alert alert-danger">
+            <div *ngIf="txthasta.errors.required">
+              Parametro requerido.
+            </div>
+            <div *ngIf="txthasta.errors.minlength">
+              Debe tener al menos 3 caracteres.
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label class="col-2" for="categoria" >Empresa</label>
+          <select  name="idcategoria" id="categoria" class="form-control col-8" [(ngModel)]="empresa.nombre" #idcategoria="ngModel">
+          <option value="claro"> claro </option>
+          <option value="personal">personal </option>
+          <option value="movistar">movistar </option>
+          <option value="" aria-selected="true" > seleccione... </option>
+      </select>
+      <div [hidden]="idcategoria.valid || idcategoria.pristine" class="alert alertdanger">
+        La empresa es requerida
+      </div> 
+          </div>
+        <label> Longitud del texto {{tamaniotexto}} </label>
+        <div class="row form-group">
+          <textarea class="form-control" [maxlength]= "tamaximo" rows="5" name="txtTexto" [(ngModel)]="mensaje.texto" (ngModelChange)="cambiarTamanioTexto()" #txtTexto="ngModel" required minlength="3">  
+          </textarea>
+          <div *ngIf="txtTexto.invalid && (txtTexto.dirty || txtTexto.touched)" class="alert alert-danger">
+            <div *ngIf="txtTexto.errors.required">
+              Debe haber algo escrito
+            </div>
+            <div *ngIf="txtTexto.errors.minlength">
+              Debe tener al menos tres letras
+            </div>
+          </div>
+        </div>
+        <div class="row form-group">
+          <button type="button" class="btn btn-primary mr-2"  (click)= "enviarMensaje()"[disabled]="!mensajeriaForm.form.valid" >Enviar</button>
+          <button type="button" class="btn btn-primary" >Actualizar</button>            
+        </div>
+      </div>
+    </form>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">De: </th>
+          <th scope="col">Para: </th>
+          <th scope="col">Mensaje</th>
+          <th scope="col">Fecha De envio</th>
+          <th scope="col">empresa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of mensajes">
+          <th scope="row">{{item.desde}}</th>
+          <td>{{item.para}}</td>
+          <td>{{item.texto}}</td>
+          <td>{{item.fecha}}</td>
+          <td>{{item.empresa.nombre}}</td>
+        </tr>
+        
+      </tbody>
+    </table>
+</div>

@@ -1,0 +1,121 @@
+<div class="margenes">
+  <form class="row bg-info f"   #f="ngForm"> 
+    <h1 class=" ml-2 col-md-12 text-center"> Resgistrarse</h1>
+        <div class="form-group col-md-12 ">
+          <label  class="col-sm-2 col-form-label">Email</label>
+          <div class="col-sm-12">
+            <input type="text" class="form-control" name="staticEmail"  [(ngModel)]="asistencia.usuario" #staticEmail="ngModel" required minlength="15">
+          </div>
+          
+        <div *ngIf="staticEmail.invalid && (staticEmail.dirty || staticEmail.touched)" class="alert alert-danger">
+          <div *ngIf="staticEmail.errors.required">
+            el email es requerido.
+          </div>
+          <div *ngIf="staticEmail.errors.minlength">
+            Debe tener al menos 15 caracteres. ejemplo: email@example.com
+          </div>
+        </div>
+        </div>
+        
+        <div class="form-group col-md-12 " >
+          <label  class="col-sm-2 col-form-label">Password</label>
+          <div class="col-sm-12">
+            <input type="password" class="form-control" id="inputPassword"  name="inputPassword" #inputPassword="ngModel" required minlength="8" [(ngModel)]="pass">
+            
+          </div>
+          <div *ngIf="inputPassword.invalid && (inputPassword.dirty || inputPassword.touched)" class="alert alert-danger">
+            <div *ngIf="inputPassword.errors.required">
+              la contraseña es obligaria.
+            </div>
+            <div *ngIf="inputPassword.errors.minlength">
+              la contraseña debe contener almenos 8 caracteres
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-md-12 " >
+          <label  class="col-sm-5 col-form-label" >nombre de organizacion</label>
+          <div class="col-sm-12">
+            <input type="text" class="form-control"  [(ngModel)]="asistencia.nombreDeOrganizacion" name="inputnombreorganizacion" required #inputnombreorg="ngModel" minlength="5">
+          </div>
+
+          <div *ngIf="inputnombreorg.invalid && (inputnombreorg.dirty || inputnombreorg.touched)" class="alert alert-danger">
+            <div *ngIf="inputnombreorg.errors.required">
+              La organizacion es requerida.
+            </div>
+            <div *ngIf="inputnombreorg.errors.minlength">
+              el nombre de la organizacion tener al menos 5 caracteres.
+            </div>
+          </div>
+  
+            <br>
+
+        </div>
+          <br>
+        <div class="form-group form-check col-md-12 "  >
+          <label class="form-check-label  ml-2" for="chequeo">requiere constancia?</label>                            
+          
+          <input  class="ml-5" type="radio" name="chequeo"   value="true" (change)="cambiarestados(true)" >
+          Si
+          <input class="ml-3" type="radio" name="chequeo"  checked="false" value="false" (change)="cambiarestados(false)">
+          No
+        </div>
+        <br>
+        <button type="button" class="btn btn-primary ml-4" [disabled]="!f.form.valid" (click)= "enviarinforme()">Guardar</button>
+      </form>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">correo: </th>
+            <th scope="col">requiere constancia</th>
+            <th scope="col">Nombre De Organizacion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of listaAsistencia">
+            <th scope="row">{{item.usuario}}</th>
+            <td id="consta">{{item.solicitudConstancia}}</td>
+            <td>{{item.nombreDeOrganizacion | uppercase }}</td>
+            <td > <button class="btn-danger" (click)="eliminar(item)"> eliminar</button> <br> <br> <button class="btn-warning" data-toggle="modal" data-target="#exampleModal2" data-whatever="@mdo"(click)="seleccionarAsistente(item)"> modificar</button></td>
+          </tr>
+          
+        </tbody>
+      </table>
+    
+
+</div>
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Formulario</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="text-mensaje3" class="col-form-label">dni</label>
+            <input name="textcobrador" type="text" class="form-control" id="text-mensaje3" [(ngModel)]="asistenteselect.usuario">
+          </div>
+          <div class="form-group">
+            <label for="text-mensaje5" class="col-form-label">nombre De Organizacion</label>
+            <input type="number" name="text-organizacion" class="form-control" id="text-mensaje5"[(ngModel)]="asistenteselect.nombreDeOrganizacion">
+          </div>
+          <div class="form-group form-check col-md-12 "  >
+            <label class="form-check-label  ml-2" for="chequeo">requiere constancia?</label>                            
+            <input id="radio"  class="ml-5" type="radio" name="chequeo"    (change)="cambiarestado(1)" >
+            Si
+            <input id="radio1" class="ml-3" type="radio" name="chequeo"  (change)="cambiarestado(2)"  >
+            No
+          </div>
+          
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="limpiarmodal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)= " modificarAsistenteconfirmacion()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>

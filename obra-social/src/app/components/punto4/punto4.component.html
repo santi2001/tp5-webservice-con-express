@@ -1,0 +1,28 @@
+<form id="form">
+    <div class="row bordes mt-3">
+        <h3 class="col-4"> Vidas : {{vidas}}</h3>
+        <h3 class="col-8 text-center"> Puntaje : {{puntuacion}}</h3>
+    </div>
+    <div class="row col-12 "> 
+        <img src="assets/{{objeto.url_imagen}}" class="rounded mx-auto d-block imagen-logo"    alt="...">
+        
+    </div>
+    <form>
+        <div class=" row col-12" id="inputs" >
+            <input *ngIf="tamanio_palabra >=1" class="form-control  col-sm-1 col-sm-x mr-3 " maxlength="1" type="text" name="txtletra1" [(ngModel)]="palabraing[0]" (ngModelChange)="controlar(0)" />
+              <input *ngIf="tamanio_palabra >=2" class="form-control  col-sm-1 col-sm-x mr-3" maxlength="1" type="text" name="txtletra2" [(ngModel)]="palabraing[1]"(ngModelChange)="controlar(1)"/>
+              <input *ngIf="tamanio_palabra >=3" class="form-control col-sm-1 col-sm-x mr-3" maxlength="1" type="text" name="txtletra3" [(ngModel)]="palabraing[2]" (ngModelChange)="controlar(2)"/>
+              <input *ngIf="tamanio_palabra >=4" class="form-control  col-sm-1 col-sm-x mr-3 " maxlength="1" type="text" name="txtletra4" [(ngModel)]="palabraing[3]" (ngModelChange)="controlar(3)"/>
+              <input *ngIf="tamanio_palabra >=5" class="form-control col-sm-1 col-sm-x mr-3"  maxlength="1"type="text" name="txtletra5" [(ngModel)]="palabraing[4]" (ngModelChange)="controlar(4)"/>
+              <input *ngIf="tamanio_palabra >=6" class="form-control  col-sm-1 col-sm-x mr-3" maxlength="1" type="text" name="txtletra6" [(ngModel)]="palabraing[5]" (ngModelChange)="controlar(5)"/>
+              <input *ngIf="tamanio_palabra >=7" class="form-control col-sm-1 col-sm-x mr-3" maxlength="1" type="text" name="txtletra7" [(ngModel)]="palabraing[6]" (ngModelChange)="controlar(6)"/>
+              <input *ngIf="tamanio_palabra >=8" class="form-control  col-sm-1 col-sm-x mr-3" maxlength="1" type="text" name="txtletra8" [(ngModel)]="palabraing[7]" (ngModelChange)="controlar(7)"/>
+              <input *ngIf="tamanio_palabra >=9" class="form-control col-sm-1 col-sm-x mr-3"   maxlength="1"  type="text" name="txtletra9" [(ngModel)]="palabraing[8]"  (ngModelChange)="controlar(8)"/>
+       </div>
+    </form>
+
+<div class="row col-12">
+    <h2  class="text-center"> nombre: {{objeto.palabra_espaniol}}</h2>
+</div>
+</form>
+  

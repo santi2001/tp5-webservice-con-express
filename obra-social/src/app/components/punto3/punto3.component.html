@@ -1,0 +1,175 @@
+<div class="row">
+    <form class="col-md-10 " #formregistro="ngForm">
+        <h2 class="text-center"> GESTION DE PASAJEROS </h2>
+        <div class="form-group row">
+            <label for="iddnipasajero" class="col-2">DNI</label>
+            <input id="iddnipasajero" class="form-control form-control-sm col-10" 
+                type="text" name="iddnipasajero" placeholder="ingrese dni" required minlength="7"  [(ngModel)]="pasaje.dni" #iddnipasajero="ngModel"/>
+                <div *ngIf="iddnipasajero.invalid && (iddnipasajero.dirty || iddnipasajero.touched)" class="alert alert-info">
+                    <div *ngIf="iddnipasajero.errors.required">
+                        Dni es un campo requerido
+                    </div>
+                    <div *ngIf="iddnipasajero.errors.minlength">
+                        el dni requiere como minimo 7 digitos
+                    </div>
+                </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-2" for="idprecio">Precio pasaje</label>
+            <input id="idprecio" class="form-control form-control-sm col-10"
+                 type="text"  name="idprecio" placeholder="ingrese precio" required #precio [(ngModel)]="pasaje.precio"/>
+                 <div *ngIf="precio.invalid && (precio.dirty || precio.touched)" class="alert alert-info">
+                  <div *ngIf="precio.errors.required">
+                      Dni es un campo requerido
+                  </div>
+                  
+              </div>   
+        </div>
+        <div class="form-group row">
+            <label class="col-2" for="categoria" >categor&iacute;a</label>
+            <select  name="idcategoria" id="categoria" #idcategoria="ngModel" class="form-control col-8" required [(ngModel)]="pasaje.categoria"  (change)="calcularDescuento()">
+            <option value="m"> Menor </option>
+            <option value="a">Adulto </option>
+            <option value="j">Jubilado </option>
+            <option value="s" aria-selected="true" > seleccione... </option>
+        </select>
+        <div [hidden]="idcategoria.valid || idcategoria.dirty" class="alert alert-danger">
+          Declare la edad de la persona
+        </div> 
+        <div class="alert alert-danger" *ngIf="faltadeinfo"> primero debe ingresar el precio</div>
+            </div>
+        <div class="col-md-4" *ngIf="mostrar">Descuento : {{precio_descuento}}  Precio total : {{precio_actual}}</div>
+        <div class="form-group text-center">
+            <button class="btn btn-secondary ml-2 mr-2"  (click)= "agregarlista()" [disabled]="!formregistro.form.valid"> Guardar</button>
+            <button class="btn btn-secondary ml-2 mr-2" (click)= "limpiar()">Limpiar</button>
+        </div>
+    </form>
+</div>
+<div class="row"><h2 class="alert alert-success col-12">Lista de pasajeros</h2></div>
+    <table class="table table-striped" [mfData]="listapasajes" #mf="mfDataTable" [mfRowsOnPage]="5">
+   
+        <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Dni</th>
+              <th scope="col">Precio</th>
+              <th scope="col">categor&iacute;a</th>
+              <th scope="col">fecha</th>
+              <th scope="col">acciones</th>
+            </tr>
+          </thead>
+        <tbody>
+            <tr *ngFor="let pasaje of listapasajes">
+                <td></td>
+                <td>{{pasaje.dni}}</td>
+                <td>{{pasaje.precio}}</td>
+                <td>{{pasaje.categoria | uppercase}}</td>
+                <td>{{pasaje.fecha | date : 'dd/MM/yyyy'}}</td>
+                <td><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo" [disabled]="!pasaje.habilitar" (click)="seleccionarPasaje(pasaje)">agregar Adelanto</button>
+                     <br> <br><button data-toggle="modal" data-target="#exampleModal2" data-whatever="@mdo" (click)="modificarPasaje(pasaje)"> Modificar Pasaje</button>
+                     <br> <br> <button (click)="eliminarPasaje(pasaje)" >Eliminar Pasaje</button>
+                      <br> <br> <button (click)="mostrare(pasaje)" >mostrar Adelantos</button>
+                    </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+            <td colspan="4">
+            <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+            </td>
+            </tr>
+            </tfoot>
+    </table>
+   
+    <div *ngIf="band">
+        <table class="table table-striped" >
+   
+            <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">cobrador</th>
+                  <th scope="col">monto</th>
+                  <th scope="col">fecha</th>
+                  <th scope="col">acciones</th>
+                </tr>
+              </thead>
+            <tbody>
+                <tr *ngFor="let pasaje of pasajeselect.adelantos">
+                    <td></td>
+                    <td>{{pasaje.cobrador}}</td>
+                    <td>{{pasaje.montoAdelanto}}</td>
+                    <td>{{pasaje.fecha | date : 'dd/MM/yyyy'}}</td>
+                    <td><button (click)="eliminarAdelanto(pasaje)">EliminarAdelanto</button></td>
+             </tr>
+            </tbody>
+        </table>
+    </div>
+<!-- Button trigger modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Formulario</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="text-mensaje" class="col-form-label">Cobrador</label>
+            <input name="textcobrador" type="text" class="form-control" id="text-mensaje" [(ngModel)]="adelantonew.cobrador">
+          </div>
+          <div class="form-group">
+            <label for="text-mensaje" class="col-form-label">Monto</label>
+            <input type="number" name="text-monto" class="form-control" id="text-mensaje"[(ngModel)]="adelantonew.montoAdelanto">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="limpiarmodal()">Cancelar</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)= "actualizarAdelanto()">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Formulario</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="text-mensaje" class="col-form-label">dni</label>
+              <input name="textcobrador" type="text" class="form-control" id="text-mensaje" [(ngModel)]="pasajeselect.dni">
+            </div>
+            <div class="form-group">
+              <label for="text-mensaje" class="col-form-label">precio</label>
+              <input type="number" name="text-monto" class="form-control" id="text-mensaje"[(ngModel)]="pasajeselect.precio">
+            </div>
+            <div class="form-group">
+                <label for="text-mensaje1" class="col-form-label">categoria</label>
+                <select  name="idcategoria" id="categoria" class="form-control col-8" [(ngModel)]="pasajeselect.categoria">
+                    <option value="m"> Menor </option>
+                    <option value="a">Adulto </option>
+                    <option value="j">Jubilado </option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="text-mensaje2" class="col-form-label">Fecha</label>
+                <input type="date" name="text-monto2" class="form-control" id="text-mensaje2"[(ngModel)]="pasajeselect.fecha" >
+              </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="limpiarmodal()">Cancelar</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)= " modificarPasajeconfirmacion()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
